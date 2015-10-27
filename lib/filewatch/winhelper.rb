@@ -8,6 +8,10 @@ module Winhelper
 	class FileTime < FFI::Struct
 		layout :lowDateTime, :uint,
 		:highDateTime, :uint
+
+    def self.release(pointer)
+      Winhelper.free_some_struct(pointer) unless pointer.nil?
+    end
 	end
 	
 	#http://msdn.microsoft.com/en-us/library/windows/desktop/aa363788(v=vs.85).aspx
@@ -28,6 +32,10 @@ module Winhelper
 		:numberOfLinks, :uint, #DWORD    nNumberOfLinks;
 		:fileIndexHigh, :uint, #DWORD    nFileIndexHigh;
 		:fileIndexLow, :uint #DWORD    nFileIndexLow;
+
+    def self.release(pointer)
+      Winhelper.free_some_struct(pointer) unless pointer.nil?
+    end
 	end
 		
 	
