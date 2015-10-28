@@ -43,15 +43,22 @@ module Winhelper
     fileInfo = Winhelper::FileInformation.new
     success = GetFileInformationByHandle(handle, fileInfo)
     CloseHandle(handle)
-    if  success == 1
+
+    handle = nil
+
+    if success == 1
       #args = [
       #		fileInfo[:fileAttributes], fileInfo[:volumeSerialNumber], fileInfo[:fileSizeHigh], fileInfo[:fileSizeLow], 
       #		fileInfo[:numberOfLinks], fileInfo[:fileIndexHigh], fileInfo[:fileIndexLow]
       #	]
       #p "Information: %u %u %u %u %u %u %u " % args
       #this is only guaranteed on NTFS, for ReFS on windows 2012, GetFileInformationByHandleEx should be used with FILE_ID_INFO, which returns a 128 bit identifier
-      return "#{fileInfo[:volumeSerialNumber]}-#{fileInfo[:fileIndexLow]}-#{fileInfo[:fileIndexHigh]}"
+      uid "#{fileInfo[:volumeSerialNumber]}-#{fileInfo[:fileIndexLow]}-#{fileInfo[:fileIndexHigh]}"
+      fileInfo = nil
+
+      return uid
     else
+      fileInfo = nil
       #p "cannot retrieve file information, returning path"
       return path;
     end
